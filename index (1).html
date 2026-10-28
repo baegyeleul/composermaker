@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#201b35" />
+  <title>작곡가 메이커</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Montserrat:wght@700;800&display=swap');
+    :root{--ink:#292236;--paper:#f8f1df;--cream:#fffaf0;--violet:#65518d;--gold:#bd8c32;--rose:#b95c67;--green:#668470;--line:#d8c9ad;--shadow:rgba(41,34,54,.18)}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#211c31;color:var(--ink)}body{font-family:'Gowun Batang',serif;background:radial-gradient(circle at 20% 15%,#55456f 0,transparent 27%),linear-gradient(135deg,#211c31,#362b4b 55%,#171421)}button,input{font:inherit}
+    .app{width:min(1480px,100%);margin:auto;min-height:100vh;padding:18px;display:grid;grid-template-columns:270px 1fr 305px;gap:15px}
+    .panel{background:var(--paper);border:1px solid rgba(255,255,255,.35);border-radius:18px;box-shadow:0 15px 45px rgba(0,0,0,.25);overflow:hidden}
+    .left{display:flex;flex-direction:column}.crest{padding:22px 20px 17px;color:#fff;background:linear-gradient(135deg,#58457d,#312746);position:relative}.crest::after{content:'♫';position:absolute;right:14px;top:8px;font-size:64px;color:rgba(255,255,255,.09)}.kicker{font:700 10px Montserrat,sans-serif;letter-spacing:.2em;color:#e7c77c}.crest h1{font-size:27px;margin:6px 0 2px}.crest p{margin:0;color:#d8cee7;font-size:13px}
+    .portrait{height:235px;position:relative;background:linear-gradient(#ddcdb4,#f1e7d3);overflow:hidden;border-bottom:1px solid var(--line)}.window{position:absolute;width:130px;height:180px;left:50%;top:22px;transform:translateX(-50%);border-radius:70px 70px 0 0;border:8px solid #c2aa88;background:linear-gradient(#8da6bd,#f1c89c 75%);box-shadow:inset 0 0 0 2px #f4e7cc}.window::before,.window::after{content:'';position:absolute;background:#c2aa88}.window::before{width:7px;height:100%;left:50%}.window::after{height:7px;width:100%;top:47%}.student{position:absolute;left:50%;bottom:-10px;transform:translateX(-50%);width:145px;height:195px}.hair{position:absolute;left:40px;top:8px;width:68px;height:82px;border-radius:48% 52% 43% 43%;background:#332534}.face{position:absolute;left:47px;top:23px;width:55px;height:65px;border-radius:48% 48% 44% 44%;background:#e5b997;z-index:2}.bang{position:absolute;left:44px;top:14px;width:62px;height:35px;background:#332534;z-index:3;border-radius:70% 30% 60% 25%;transform:rotate(-7deg)}.body{position:absolute;left:17px;top:87px;width:112px;height:110px;background:linear-gradient(110deg,#5b497b,#312846);clip-path:polygon(27% 0,73% 0,100% 30%,87% 100%,13% 100%,0 30%)}.collar{position:absolute;z-index:3;left:54px;top:85px;width:38px;height:35px;background:#f4ebd9;clip-path:polygon(0 0,50% 70%,100% 0,84% 100%,50% 82%,16% 100%)}
+    .identity{padding:15px 18px;border-bottom:1px solid var(--line)}.identity b{display:block;font-size:18px}.identity span{font-size:13px;color:#796d7f}.record{padding:14px 18px;display:grid;gap:9px;font-size:13px}.record-row{display:flex;justify-content:space-between}.record-row b{color:var(--violet)}button.record-row{width:100%;border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left}button.record-row:hover span{text-decoration:underline}button.record-row:hover b{color:#9a5960}.danger-link{margin:auto 18px 17px;border:0;background:none;color:#9a5960;text-decoration:underline;cursor:pointer}
+    .center{display:flex;flex-direction:column;min-width:0}.topbar{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;background:#fffaf1;border-bottom:1px solid var(--line)}.year strong{font:800 21px Montserrat,sans-serif;color:var(--violet)}.year span{display:block;font-size:12px;color:#897d82}.turns{font-size:13px;color:#756a78}.quick-life{position:sticky;top:0;z-index:8;display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:9px 18px;background:rgba(248,241,223,.96);border-bottom:1px solid var(--line);box-shadow:0 5px 12px rgba(41,34,54,.1);backdrop-filter:blur(8px)}.quick-meter{display:grid;grid-template-columns:auto 28px;gap:3px 7px;align-items:center;font:700 11px Montserrat,sans-serif;color:#6f6372}.quick-meter b{text-align:right;font-size:13px;color:var(--ink)}.quick-meter .bar{grid-column:1/-1;height:6px}.quick-meter.danger{color:#a43848}.quick-meter.danger b{color:#b3283d}.quick-meter.danger .bar{outline:2px solid rgba(185,76,94,.28)}.message{margin:15px 18px 0;padding:12px 15px;border-radius:12px;background:#efe4ca;border:1px solid #dfceaa;min-height:49px;font-size:14px;line-height:1.6}.activities{padding:14px 18px 18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;overflow:auto}.activity{position:relative;text-align:left;border:1px solid #d9c9ad;background:#fffaf0;border-radius:13px;padding:13px;cursor:pointer;min-height:128px;transition:.18s;box-shadow:0 3px 0 #d8c8aa}.activity:hover{transform:translateY(-2px);border-color:#9479b3;box-shadow:0 6px 0 #c7b0d8}.activity:active{transform:translateY(2px);box-shadow:none}.activity h3{font-size:15px;margin:0 0 5px;color:#443756}.activity p{font-size:12px;line-height:1.45;color:#7a6c74;margin:0 0 23px}.cost{position:absolute;left:12px;right:12px;bottom:9px;display:flex;gap:7px;font:700 10px Montserrat,sans-serif}.hp{color:#a84855}.money{color:#9a7628}.good{color:#49725a}.activity.rest{background:#edf2e8}.activity.experiment{background:#eee9f7}
+    .right{padding:18px 17px;overflow:auto}.section-title{font:800 12px Montserrat,sans-serif;letter-spacing:.12em;color:#6e5b85;margin:0 0 12px}.life{display:grid;gap:10px;margin-bottom:20px}.meter-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}.bar{height:9px;border-radius:999px;background:#e4d9c5;overflow:hidden}.fill{height:100%;border-radius:inherit;transition:.35s}.fill.health{background:linear-gradient(90deg,#b94d61,#e18a91)}.fill.wealth{background:linear-gradient(90deg,#a87825,#dfbd5b)}.fill.fame{background:linear-gradient(90deg,#5e548d,#9c83c3)}
+    .music-list{display:grid;gap:8px;margin-bottom:20px}.music-row{display:grid;grid-template-columns:43px 1fr 27px;align-items:center;gap:7px;font-size:11px}.music-row .bar{height:7px}.music-row .fill{background:linear-gradient(90deg,#5e7c70,#8eb69b)}
+    .works{display:flex;gap:6px;flex-wrap:wrap}.badge{padding:5px 7px;border-radius:7px;background:#eadfc9;font-size:11px;color:#675b5f}.badge.zero{opacity:.52}.activity.earn{grid-column:1/-1;min-height:84px;background:#f5edd3;border-color:#c6a957}.activity.earn p{margin-bottom:20px}
+    .overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(17,13,27,.78);backdrop-filter:blur(8px);padding:18px;z-index:20}.overlay.open{display:grid}.modal{width:min(760px,96vw);max-height:92vh;overflow:auto;background:var(--paper);border-radius:22px;border:1px solid #efe0c1;box-shadow:0 30px 90px #000;padding:26px}.modal h2{margin:0 0 7px;font-size:27px}.modal p{line-height:1.75}.subchoices{display:grid;gap:9px;margin-top:17px}.subchoices button,.primary,.secondary{border:0;border-radius:11px;padding:12px 15px;cursor:pointer}.subchoices button,.primary{background:linear-gradient(90deg,#66518c,#8b699d);color:white}.secondary{background:#e7dbc5;color:#53475b}.end-kicker{font:800 11px Montserrat,sans-serif;color:var(--rose);letter-spacing:.18em}.end-title{font-size:34px;font-weight:700;margin:5px 0 2px}.end-type{font-size:17px;color:var(--violet);font-weight:700}.end-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:18px 0}.end-box{background:#fffaf0;border:1px solid var(--line);border-radius:13px;padding:13px}.end-box h3{font-size:12px;margin:0 0 8px;color:#83699b}.scoreline{display:flex;justify-content:space-between;margin:5px 0;font-size:13px}.ending-actions{display:flex;gap:8px}.ending-actions button{flex:1}.fail .end-title{color:#a43d4a;font-size:38px}.fineprint{font-size:12px;color:#8a7c82}.log{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;font-size:12px;color:#776b72;max-height:110px;overflow:auto}.log div{margin:5px 0}
+    .toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-80px);opacity:0;background:#282138;color:#fff;padding:10px 17px;border-radius:999px;z-index:30;transition:.3s;box-shadow:0 8px 30px #000}.toast.show{transform:translate(-50%,0);opacity:1}.event-options{display:grid;gap:10px;margin-top:17px}.event-choice{border:1px solid #d6c4a7;background:#fffaf0;border-radius:13px;padding:13px 15px;text-align:left;cursor:pointer}.event-choice:hover{border-color:#8067a1;background:#f2eaf8}.event-choice b{display:block;color:#493b5e;margin-bottom:4px}.event-choice span{display:block;font-size:12px;color:#7b6c75;line-height:1.5}.event-flavor{color:#796887;font-style:italic}.trait-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.trait{padding:4px 7px;border-radius:999px;background:#e9def0;color:#65517b;font-size:11px}
+    .collection-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:18px 0}.collection-card{min-height:75px;border:1px dashed #cdbfa7;border-radius:12px;background:#eee5d5;color:#aa9d99;display:grid;place-items:center;text-align:center;padding:8px;font:700 13px Montserrat,sans-serif}.collection-card.found{border-style:solid;border-color:#a98fc0;background:linear-gradient(145deg,#fffaf0,#e9def0);color:#4f4064;box-shadow:0 3px 0 #d2c0dc}.collection-card.hidden.found{border-color:#b88948;background:linear-gradient(145deg,#fff5dc,#e9d5ad);color:#76521f}.collection-card small{display:block;margin-top:4px;font:400 10px 'Gowun Batang',serif;color:#8a748f}
+    @media(max-width:980px){body{overflow:auto}.app{grid-template-columns:230px 1fr}.right{grid-column:1/-1;display:grid;grid-template-columns:1fr 2fr 1.2fr;gap:16px}.section-title{margin-top:0}.activities{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:680px){.app{display:block;padding:8px}.panel{margin-bottom:9px}.portrait{height:165px}.student{transform:translateX(-50%) scale(.78);transform-origin:bottom}.left .record{grid-template-columns:1fr 1fr}.center{min-height:auto}.quick-life{padding:8px 10px;gap:6px}.quick-meter{font-size:9px;grid-template-columns:auto 23px}.quick-meter b{font-size:12px}.activities{grid-template-columns:1fr 1fr;padding:10px;gap:7px}.activity{min-height:118px;padding:10px}.activity h3{font-size:14px}.right{display:block}.end-grid{grid-template-columns:1fr}.collection-grid{grid-template-columns:repeat(3,1fr);gap:6px}.collection-card{min-height:65px;font-size:11px}.modal{padding:20px}.end-title{font-size:29px}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <aside class="panel left">
+      <div class="crest"><div class="kicker">ROYAL ACADEMY</div><h1>작곡가 메이커</h1><p>어찌저찌 음악가는 되어 봅시다.</p></div>
+      <div class="portrait"><div class="window"></div><div class="student"><div class="hair"></div><div class="face"></div><div class="bang"></div><div class="body"></div><div class="collar"></div></div></div>
+      <div class="identity"><b id="studentName">이름 없는 영재</b><span id="studentDesc">아직 아무 유형도 아닙니다.</span></div>
+      <div class="record">
+        <div class="record-row"><span>완성 작품</span><b id="worksCount">0곡</b></div>
+        <div class="record-row"><span>정규교육</span><b id="formalCount">0회</b></div>
+        <div class="record-row"><span>독학</span><b id="selfCount">0회</b></div>
+        <div class="record-row"><span>피아노</span><b id="pianoCount">0회</b></div>
+        <button class="record-row" id="collectionBtn" type="button"><span>발견한 작곡가 ↗</span><b id="composerCollection">0 / 27</b></button>
+        <div class="record-row"><span>본 엔딩</span><b id="endingCount">0회</b></div>
+      </div>
+      <button class="danger-link" id="quitBtn">육성을 포기한다</button>
+    </aside>
+
+    <section class="panel center">
+      <div class="topbar"><div class="year"><strong id="ageText">10세 · 봄</strong><span>22세가 될 때까지 두 번씩 활동합니다.</span></div><div class="turns" id="turnText">1 / 24</div></div>
+      <div class="quick-life" id="quickLife"></div>
+      <div class="message" id="message">첫 수업입니다. 무엇을 시킬까요?</div>
+      <div class="activities" id="activities"></div>
+    </section>
+
+    <aside class="panel right">
+      <div><h2 class="section-title">LIFE</h2><div class="life" id="lifeMeters"></div></div>
+      <div><h2 class="section-title">MUSIC</h2><div class="music-list" id="musicMeters"></div></div>
+      <div><h2 class="section-title">WORKS & ROUTE</h2><div class="works" id="badges"></div><div class="log" id="log"></div></div>
+    </aside>
+  </main>
+
+  <div class="overlay" id="nameOverlay"><div class="modal"><div class="end-kicker">NEW STUDENT</div><h2>작곡가를 맡아주세요</h2><p>12년 동안 수업과 창작을 골라 가장 닮은 작곡가 유형을 만듭니다. 건강이나 재력이 0이 되면 즉시 끝납니다.</p><input id="nameInput" maxlength="16" placeholder="이름 없는 영재" style="width:100%;padding:13px;border:1px solid var(--line);border-radius:10px;background:#fffaf0"><div style="height:10px"></div><button class="primary" id="startBtn" style="width:100%">육성 시작</button></div></div>
+  <div class="overlay" id="experimentOverlay"><div class="modal"><div class="end-kicker">EXPERIMENT</div><h2>무엇을 실험할까요?</h2><p>실험 방향은 최종 작곡가 유형을 크게 바꿉니다.</p><div class="subchoices"><button data-exp="expHarmony">새로운 화성을 실험한다</button><button data-exp="expRhythm">불규칙한 리듬을 실험한다</button><button data-exp="expSound">새로운 음향을 실험한다</button></div></div></div>
+  <div class="overlay" id="studyOverlay"><div class="modal"><div class="end-kicker">SELF STUDY</div><h2>무엇을 읽을까요?</h2><p>악보는 형식과 화성을, 문학은 선율과 극적 상상력을 키웁니다. 어느 쪽이든 독학으로 기록됩니다.</p><div class="subchoices"><button data-study="score">악보를 분석한다</button><button data-study="literature">문학을 읽는다</button></div></div></div>
+  <div class="overlay" id="eventOverlay"><div class="modal"><div class="end-kicker">UNEXPECTED EVENT</div><h2 id="eventTitle"></h2><p class="event-flavor" id="eventText"></p><div class="event-options" id="eventOptions"></div></div></div>
+  <div class="overlay" id="collectionOverlay"><div class="modal"><div class="end-kicker">COMPOSER COLLECTION</div><h2>작곡가 도감</h2><p>지금까지 발견한 작곡가 유형입니다. 아직 만나지 못한 유형의 이름은 공개되지 않습니다.</p><div class="collection-grid" id="collectionGrid"></div><button class="secondary" id="collectionClose" style="width:100%">도감 닫기</button></div></div>
+  <div class="overlay" id="endingOverlay"><div class="modal" id="endingModal"><div class="end-kicker" id="endKicker"></div><div class="end-title" id="endTitle"></div><div class="end-type" id="endType"></div><p id="endText"></p><div id="endDetails"></div><div class="ending-actions"><button class="primary" id="retryBtn">처음부터 다시</button></div></div></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const statNames={structure:'구조',melody:'선율',harmony:'화성',rhythm:'리듬',timbre:'음색',drama:'극성',innovation:'실험'};
+    const initial=()=>({name:'이름 없는 영재',turn:0,health:86,wealth:92,fame:3,works:0,stats:{structure:16,melody:16,harmony:16,rhythm:16,timbre:16,drama:16,innovation:10},tags:{formal:0,self:0,literature:0,piano:0,counter:0,solo:0,chamber:0,song:0,concerto:0,symphony:0,stage:0,orchestration:0,folk:0,experiment:0,expHarmony:0,expRhythm:0,expSound:0,rest:0,job:0},traits:{},eventsSeen:[],pendingEvent:null,log:[]});
+    let state=initial(), ended=false;
+    const loadCollection=()=>{try{return JSON.parse(localStorage.getItem('composer-maker-collection'))||{total:0,composers:[]}}catch{return{total:0,composers:[]}}};
+    let collection=loadCollection();
+    function recordEnding(composerId){collection.total=(collection.total||0)+1;if(composerId&&!collection.composers.includes(composerId))collection.composers.push(composerId);localStorage.setItem('composer-maker-collection',JSON.stringify(collection))}
+    const traitNames={dutiful:'책임감',cautious:'신중함',pragmatic:'현실적',defiant:'반항적',responsible:'책임감',independent:'독립적',opportunist:'기회주의',optimistic:'낙천적',generous:'관대함',manager:'관리자적',selfCritical:'자기검토',grandiose:'거대지향',showman:'대중감각',principled:'원칙적',doubleVoice:'우회적 표현',perfectionist:'완벽주의',reserved:'내향적',sociable:'사교적',mentor:'교육자적',competitive:'경쟁적',adventurous:'모험적',homebound:'안정지향',adaptive:'적응력',innovative:'혁신적'};
+    const personalityMap={vivaldi:['pragmatic','manager','adaptive'],bach:['principled','dutiful','perfectionist'],haydn:['pragmatic','manager','dutiful'],mozart:['sociable','independent','showman'],beethoven:['defiant','principled','independent'],rossini:['optimistic','pragmatic','adaptive','opportunist'],schubert:['generous','sociable','reserved'],mendelssohn:['dutiful','manager','responsible','cautious'],schumann:['selfCritical','reserved','innovative'],chopin:['reserved','cautious','independent'],liszt:['generous','showman','sociable'],wagner:['grandiose','opportunist','defiant'],verdi:['manager','pragmatic','principled'],bruckner:['selfCritical','dutiful','reserved','principled'],brahms:['selfCritical','reserved','perfectionist'],dvorak:['pragmatic','sociable','dutiful'],rimsky:['mentor','manager','responsible'],tchaikovsky:['selfCritical','cautious','responsible'],puccini:['pragmatic','showman','sociable'],mahler:['perfectionist','grandiose','responsible'],strauss:['pragmatic','adaptive','manager'],debussy:['independent','innovative','reserved'],stravinsky:['adaptive','pragmatic','innovative'],bartok:['principled','reserved','independent'],shostakovich:['doubleVoice','cautious','responsible'],berlioz:['defiant','independent','grandiose','innovative','adventurous'],mussorgsky:['independent','innovative','reserved','principled','defiant']};
+    const events=[
+      {id:'family',title:'가족이 음악을 말립니다',text:'안정적인 길을 두고 왜 굳이 음악을 하느냐는 편지가 도착했습니다.',choices:[
+        {text:'일단 의견을 존중한다고 답하고 나도 재고해 본다.',effects:{health:4,structure:2},traits:['dutiful','cautious']},
+        {text:'음악으로 먹고살 구체적인 계획을 세워 설득한다.',effects:{structure:4,wealth:4},traits:['pragmatic']},
+        {text:'좆까라고 한다.',effects:{fame:-2,innovation:5},traits:['defiant']}]},
+      {id:'patron',title:'후원자가 작품 수정을 요구합니다',text:'돈은 내겠지만 듣기 좋은 방향으로 고치라는 조건이 붙었습니다.',choices:[
+        {text:'핵심은 지키되 일부 요구를 받아들인다.',effects:{wealth:12,fame:4,innovation:-3},traits:['pragmatic','responsible']},
+        {text:'내 작품에 간섭하지 말라고 거절한다.',effects:{wealth:-5,fame:2,innovation:5},traits:['defiant','independent']},
+        {text:'돈부터 받고 나중에 생각한다.',effects:{wealth:20,fame:-3},traits:['opportunist']}]},
+      {id:'colleague',title:'동료 음악가가 도움을 청합니다',text:'당장 집세를 내지 못하면 거리로 나앉게 생겼다고 합니다.',choices:[
+        {text:'조건 없이 돈을 보탠다.',effects:{wealth:-12,fame:5},traits:['generous']},
+        {text:'돈 대신 일자리를 연결해 준다.',effects:{health:-3,fame:3},traits:['manager']},
+        {text:'나도 사정이 어렵다고 거절한다.',effects:{health:2},traits:['independent']}]},
+      {id:'premiere',title:'초연이 참혹하게 실패했습니다',text:'박수는 드문드문했고 몇몇 청중은 악장 사이에 나가버렸습니다.',choices:[
+        {text:'문제를 분석해 작품을 수정한다.',effects:{health:-8,structure:5},traits:['selfCritical','perfectionist']},
+        {text:'청중이 아직 작품을 이해하지 못한 것이다.',effects:{fame:-5,innovation:4},traits:['grandiose']},
+        {text:'실패 자체를 화제로 만들어 홍보한다.',effects:{wealth:-3,fame:8},traits:['showman']},
+        {text:'다음 작품은 더 잘 팔리겠지 하며 저녁을 먹으러 간다.',effects:{health:4},traits:['optimistic']}]},
+      {id:'censorship',title:'권력이 작품을 검열합니다',text:'공연 허가를 원한다면 불편한 대목을 삭제하라는 통보입니다.',choices:[
+        {text:'공개적으로 맞선다.',effects:{fame:-8,innovation:5},traits:['principled','defiant']},
+        {text:'겉으로 고치고 악보 안에 다른 뜻을 숨긴다.',effects:{health:-6,structure:3,drama:5},traits:['doubleVoice','cautious']},
+        {text:'공연을 위해 요구를 수용한다.',effects:{wealth:8,fame:3},traits:['pragmatic']}]},
+      {id:'orchestra',title:'연주자들이 악보가 어렵다고 항의합니다',text:'이대로는 초연 날짜를 맞출 수 없다는 집단 항의가 들어왔습니다.',choices:[
+        {text:'연주 가능한 수준으로 단순화한다.',effects:{structure:3,innovation:-4},traits:['pragmatic']},
+        {text:'추가 리허설을 잡아 끝까지 완성한다.',effects:{health:-10,fame:6},traits:['perfectionist','responsible']},
+        {text:'연습이 부족한 것이라고 일축한다.',effects:{fame:-5,drama:4},traits:['grandiose']}]},
+      {id:'commission',title:'긴급 작곡 의뢰가 들어왔습니다',text:'마감은 터무니없이 촉박하지만 보수와 주목도는 상당합니다.',choices:[
+        {text:'밤을 새워서라도 맡는다.',effects:{health:-12,wealth:15,fame:8},traits:['dutiful','responsible']},
+        {text:'분량과 보수를 현실적으로 협상한다.',effects:{health:-5,wealth:10,fame:4},traits:['pragmatic']},
+        {text:'내 일정이 우선이라며 거절한다.',effects:{health:4},traits:['independent']}]},
+      {id:'critic',title:'신문에 혹평이 실렸습니다',text:'재능은 있으나 방향을 잃었다는 문장이 유난히 눈에 밟힙니다.',choices:[
+        {text:'조목조목 공개 반박한다.',effects:{health:-4,fame:2},traits:['defiant']},
+        {text:'신문을 덮고 내 작업을 계속한다.',effects:{health:3},traits:['reserved','independent']},
+        {text:'평론가를 만나 직접 이야기를 듣는다.',effects:{fame:5,health:-2},traits:['sociable','selfCritical']}]},
+      {id:'student',title:'가난한 학생이 가르침을 청합니다',text:'수업료는 거의 낼 수 없지만 배우려는 의지는 확실해 보입니다.',choices:[
+        {text:'시간을 내어 직접 가르친다.',effects:{health:-6,wealth:6,fame:4},traits:['mentor','generous']},
+        {text:'더 잘 맞는 스승을 찾아 연결해 준다.',effects:{fame:3},traits:['manager']},
+        {text:'내 작업에 집중하기 위해 거절한다.',effects:{health:3},traits:['independent']}]},
+      {id:'rival',title:'경쟁자가 공동 작업을 제안합니다',text:'서로의 이름을 걸고 새로운 작품을 만들자는 제안입니다.',choices:[
+        {text:'재미있겠다며 함께한다.',effects:{health:-4,fame:7,melody:3},traits:['sociable']},
+        {text:'누가 더 나은지 각자 작품으로 겨룬다.',effects:{health:-7,structure:4,drama:3},traits:['competitive']},
+        {text:'혼자 쓰는 편이 편하다고 거절한다.',effects:{health:2},traits:['reserved']}]},
+      {id:'tour',title:'외국 순회공연 제안이 들어왔습니다',text:'낯선 도시와 청중을 만날 기회지만 긴 여행을 감당해야 합니다.',choices:[
+        {text:'당장 짐을 싸서 떠난다.',effects:{health:-8,wealth:-8,fame:12},traits:['adventurous']},
+        {text:'일정과 비용을 꼼꼼히 조정한 뒤 간다.',effects:{health:-4,wealth:-3,fame:7},traits:['cautious','manager']},
+        {text:'익숙한 곳에서 작업을 계속한다.',effects:{health:5},traits:['homebound','reserved']}]},
+      {id:'fashion',title:'새로운 음악 유행이 번집니다',text:'도시의 극장과 살롱이 모두 낯선 새 양식을 이야기합니다.',choices:[
+        {text:'유행을 빠르게 작품에 받아들인다.',effects:{fame:7,innovation:2},traits:['adaptive']},
+        {text:'내 방식으로 완전히 비틀어 실험한다.',effects:{health:-6,innovation:7},traits:['innovative']},
+        {text:'유행과 무관하게 내 원칙을 지킨다.',effects:{fame:-4,structure:4},traits:['principled']}]}
+    ];
+    const actions=[
+      {id:'formal',title:'정규교육',desc:'음악원에서 화성과 형식을 배웁니다.',hp:-5,money:-5,stats:{structure:7,harmony:5},tag:'formal'},
+      {id:'self',title:'독학·독서',desc:'악보를 분석할지 문학을 읽을지 고릅니다.',hp:-4,money:-1,study:true},
+      {id:'piano',title:'피아노 연습',desc:'건반으로 선율과 화성을 익힙니다.',hp:-5,money:-3,stats:{melody:6,harmony:5,rhythm:2},tag:'piano'},
+      {id:'counter',title:'대위법 공부',desc:'여러 성부를 질서 있게 엮습니다.',hp:-6,money:-2,stats:{structure:9,harmony:4},tag:'counter'},
+      {id:'solo',title:'독주곡 작곡',desc:'한 대의 악기 안에 선율과 화성을 응축합니다.',hp:-6,money:-2,fame:3,work:1,stats:{melody:7,harmony:5,innovation:2},tag:'solo'},
+      {id:'chamber',title:'실내악 작곡',desc:'소수의 악기가 대화하는 정교한 작품을 씁니다.',hp:-8,money:-4,fame:4,work:1,stats:{structure:6,harmony:5,melody:4},tag:'chamber'},
+      {id:'song',title:'가곡 작곡',desc:'한 편의 시를 노래로 완성합니다.',hp:-6,money:-2,fame:3,work:1,stats:{melody:9,drama:5,harmony:2},tag:'song'},
+      {id:'concerto',title:'협주곡 작곡',desc:'독주자에게 화려한 무대를 줍니다.',hp:-8,money:-5,fame:5,work:1,stats:{rhythm:8,melody:5,timbre:3},tag:'concerto'},
+      {id:'symphony',title:'교향곡 작곡',desc:'긴 호흡으로 거대한 작품을 설계합니다.',hp:-10,money:-7,fame:6,work:1,stats:{structure:7,drama:8,timbre:5},tag:'symphony'},
+      {id:'stage',title:'무대음악 작곡',desc:'오페라나 발레를 씁니다. 실력은 확실히 늘지만 초연의 운명은 알 수 없습니다.',hp:-10,work:1,stats:{drama:10,melody:5,timbre:6},tag:'stage',premiere:true},
+      {id:'orchestration',title:'관현악법 연구',desc:'각 악기의 색과 조합을 연구합니다.',hp:-5,money:-4,stats:{timbre:10,drama:3},tag:'orchestration'},
+      {id:'folk',title:'민요 채집',desc:'여행하며 사람들의 노래를 기록합니다.',hp:-8,money:-6,stats:{rhythm:7,melody:5,innovation:3},tag:'folk'},
+      {id:'experiment',title:'실험작품',desc:'익숙한 작곡법 바깥으로 나갑니다.',special:true,displayHp:-7,displayMoney:-4,css:'experiment'},
+      {id:'rest',title:'휴식',desc:'아무것도 하지 않고 건강을 회복합니다.',hp:24,money:-3,stats:{},tag:'rest',css:'rest'},
+      {id:'job',title:'레슨·연주로 생활비 벌기',desc:'귀족 자제에게 레슨을 하고 살롱에서 연주합니다. 예술적 성장은 작지만 재력을 확실히 회복합니다.',hp:-6,money:18,fame:2,stats:{melody:2,structure:1},tag:'job',css:'earn'}
+    ];
+    const studyActions={
+      score:{id:'self',title:'독학·독서 · 악보 분석',hp:-4,money:-1,stats:{structure:5,harmony:4,innovation:1},tag:'self'},
+      literature:{id:'self',title:'독학·독서 · 문학 읽기',hp:-4,money:-1,stats:{drama:6,melody:3,innovation:2},tag:'self',extraTags:['literature']}
+    };
+    const profiles=[
+      {id:'vivaldi',name:'비발디',v:[45,76,56,95,66,62,34],tags:{concerto:4},bio:'빠른 악장과 화려한 독주, 멈추지 않는 박동으로 청중을 사로잡았습니다. 고아원의 학생들을 가르치며 협주곡을 끝없이 썼고, 사람들은 곡들이 비슷하다고 했지만 이번에는 조성이 달랐습니다.'},
+      {id:'bach',name:'바흐',v:[100,72,92,67,58,67,37],tags:{counter:4,formal:1},bio:'각각의 성부가 독립적으로 움직이면서 거대한 질서를 이루었습니다. 교회와 고용조건으로 자주 싸웠고, 매주 새 작품을 써야 했지만 마감은 지켰습니다. 고용주는 대체로 틀렸습니다.'},
+      {id:'haydn',name:'하이든',v:[92,84,80,86,68,70,64],tags:{chamber:4,symphony:2},balance:true,worksWeight:.4,bio:'오랜 고용생활 속에서 교향곡과 현악사중주를 끝없이 썼습니다. 형식을 무너뜨리지 않고도 청중의 예상을 계속 배반했고, 고용주가 음악가들을 집에 보내주지 않자 작품 안에 퇴근 요청을 넣었습니다.'},
+      {id:'mozart',name:'모차르트',v:[85,98,86,78,77,90,45],tags:{piano:1,chamber:1,song:1,stage:1},balance:true,varietyWeight:4,bio:'어린 나이에 유럽을 돌며 연주했고, 선율·형식·오페라를 모두 자연스럽게 다뤘습니다. 너무 쉽게 쓰는 것처럼 보여 사람들이 정교함을 잊었습니다. 돈은 벌었는데 남아 있지 않습니다.'},
+      {id:'beethoven',name:'베토벤',v:[100,60,80,88,70,100,72],tags:{symphony:4,chamber:2,self:1},bio:'짧은 동기 하나를 인류의 투쟁으로 확대했습니다. 귀족에게 후원은 받았지만 고개는 숙이지 않았고, 난청과 싸우며 악보를 끝없이 뜯어고쳤습니다. 주변 사람은 피곤했지만 음악사는 만족했습니다.'},
+      {id:'rossini',name:'로시니',v:[68,100,72,96,76,92,48],tags:{stage:5,song:1},wealthWeight:.15,healthWeight:.05,bio:'믿을 수 없는 속도로 오페라를 써서 유럽의 극장을 점령했습니다. 청중이 무엇을 좋아하는지 정확히 알았고, 성공과 재산을 충분히 얻은 뒤에는 더 이상 굳이 열심히 일하지 않았습니다. 이후의 주요 관심사는 요리였습니다.'},
+      {id:'schubert',name:'슈베르트',v:[55,100,86,58,48,86,43],tags:{song:5,chamber:2},bio:'거대한 극장보다 친구들의 방을 노래로 채웠습니다. 안정적인 교사직을 떠나 수백 곡의 가곡을 썼고, 괴테에게 악보를 보냈지만 답장은 오지 않았습니다.'},
+      {id:'mendelssohn',name:'멘델스존',v:[82,82,78,62,78,68,38],tags:{formal:1.5,counter:1.5,orchestration:1.5,chamber:1,piano:.5},balance:true,bio:'유복한 집안의 전폭적인 교육 아래 작곡을 배웠는데 연주·지휘·행정·교육까지 모두 맡았습니다. 바흐의 음악을 다시 무대에 올렸고 유럽을 바쁘게 오갔습니다. 모두가 당신을 믿었고, 그것이 문제였습니다.'},
+      {id:'schumann',name:'슈만',v:[72,96,92,58,55,94,68],tags:{literature:4,piano:2,solo:1,song:2},bio:'음악과 문학을 분리하지 않고 피아노곡과 가곡 속에 여러 자아와 비평과 이야기를 함께 넣었습니다. 음악잡지를 창간해 동료들을 논했고, 새로운 재능을 발견하면 누구보다 먼저 크게 알렸습니다.'},
+      {id:'chopin',name:'쇼팽',v:[60,100,96,61,57,86,56],tags:{solo:5,piano:3,song:1},bio:'한 대의 피아노 안에 조국과 사랑과 병약함을 접어 넣었습니다. 파리의 살롱에서는 사랑받았고 공개연주는 피곤했으며, 관현악 수업은 별로 중요하지 않았습니다.'},
+      {id:'liszt',name:'리스트',v:[67,91,91,85,86,96,76],tags:{solo:3,piano:3},fameWeight:0.12,bio:'유럽 순회공연을 사건으로 만들고 팬들에게 머리카락과 장갑을 빼앗겼습니다. 후배 음악가를 도왔고 연애 스캔들을 남겼으며, 말년에는 성직자의 옷을 입었습니다.'},
+      {id:'wagner',name:'바그너',v:[85,76,100,76,100,100,92],tags:{stage:4,orchestration:1,expHarmony:2},bio:'오페라 한 편을 쓰라고 했더니 신화체계와 전용 극장부터 만들었습니다. 혁명과 망명과 빚쟁이를 거쳐 왕의 후원을 얻었습니다. 후원자의 재정은 고려하지 않았습니다.'},
+      {id:'verdi',name:'베르디',v:[67,100,76,72,76,100,54],tags:{stage:5,song:2},bio:'가족사의 비극과 초기 실패 뒤에도 다시 극장으로 돌아왔습니다. 청중은 당신의 선율로 사랑하고 분노했고, 이름은 정치적 구호가 되었습니다. 은퇴한다고 말한 뒤에도 신작을 썼습니다.'},
+      {id:'bruckner',name:'브루크너',v:[100,68,96,64,96,100,58],tags:{symphony:4,counter:2,orchestration:2},bio:'신앙과 대위법과 거대한 음향을 교향곡 안에 쌓아올렸습니다. 작품을 완성한 뒤에도 주변 사람의 말 한마디에 다시 뜯어고쳤고, 그 결과 같은 교향곡의 판본이 여러 개 남았습니다.'},
+      {id:'brahms',name:'브람스',v:[100,80,96,76,64,78,42],tags:{chamber:4,symphony:2,counter:2},bio:'과거의 형식을 버리지 않고 그 안을 지나치게 촘촘하게 채웠습니다. 교향곡을 쓰기 전에는 거인의 발소리가 뒤에서 들린다고 걱정했고, 마음에 들지 않는 악보는 벽난로에 넣었습니다.'},
+      {id:'dvorak',name:'드보르자크',v:[82,100,82,88,82,82,52],tags:{folk:3,symphony:2,chamber:2},bio:'고향의 춤과 노래를 교향곡과 실내악 안에 자연스럽게 옮겼습니다. 미국에 건너가서는 새로운 세계의 음악을 찾았고, 성공한 뒤에는 기차 시간표와 증기기관을 진지하게 연구했습니다.'},
+      {id:'rimsky',name:'림스키코르사코프',v:[82,84,86,82,100,88,72],tags:{orchestration:5,folk:2,formal:1},bio:'해군 장교로 복무하면서도 음악을 놓지 않았고, 이국적인 전설과 민요를 눈부신 관현악으로 바꾸었습니다. 동료들의 거친 악보를 고쳐 출판했고 제자들은 러시아 음악계를 점령했습니다.'},
+      {id:'tchaikovsky',name:'차이콥스키',v:[75,100,86,75,100,100,62],tags:{stage:2,symphony:2,orchestration:2},bio:'법률 관료 생활을 떠나 음악을 택했습니다. 발레와 교향곡에 감정을 숨기려 했지만 선율이 전부 말해버렸습니다. 해외 청중은 열광했고 본인은 좀처럼 만족하지 못했습니다.'},
+      {id:'puccini',name:'푸치니',v:[58,100,82,62,95,100,55],tags:{stage:5,orchestration:2,song:1},bio:'객석은 등장인물이 무엇을 느끼는지 설명을 듣기 전에 이미 울고 있었습니다. 이국적인 소재와 당대의 새로운 음향을 극장 안으로 끌어들였고, 마지막 막에서는 대체로 누군가가 죽었습니다.'},
+      {id:'mahler',name:'말러',v:[100,84,88,78,100,100,72],tags:{symphony:4,orchestration:3,song:2},bio:'교향곡 안에 자연과 군악대와 민요와 종소리와 우주의 붕괴를 전부 넣었습니다. 지휘자로서는 단원들을 공포에 떨게 했고, 작곡가로서는 여름휴가마다 세계를 하나씩 만들었습니다.'},
+      {id:'strauss',name:'리하르트 슈트라우스',v:[84,78,96,72,100,98,78],tags:{orchestration:5,stage:3,symphony:3},bio:'철학책 한 권과 가정생활과 영웅의 생애를 모두 관현악으로 중계했습니다. 오페라에서는 사람의 목소리와 거대한 악단이 한 치도 양보하지 않았고, 말년에는 다시 인간의 목소리로 돌아갔습니다.'},
+      {id:'debussy',name:'드뷔시',v:[50,81,100,45,100,66,92],tags:{expHarmony:5,orchestration:2},bio:'화음이 어디론가 진행하지 않아도 그 자리에 빛나게 만들었습니다. 음악원 교수들과 충돌하고 상징주의 예술가들과 어울렸습니다. 사람들은 인상주의자라 불렀고 본인은 싫어했습니다.'},
+      {id:'stravinsky',name:'스트라빈스키',v:[76,55,76,100,100,90,100],tags:{expRhythm:5,stage:2},bio:'악센트 하나를 옮겨 공연장을 소란으로 만들었습니다. 《봄의 제전》 초연 뒤에도 멈추지 않고 스타일을 바꿨고, 사람들이 적응할 때마다 다른 곳으로 도망갔습니다.'},
+      {id:'bartok',name:'바르톡',v:[90,66,85,100,81,76,90],tags:{folk:5,expRhythm:2},bio:'축음기를 들고 농촌을 돌며 사라질 노래를 채집했습니다. 민요를 정교한 구조와 불규칙한 리듬으로 바꿨고, 파시즘을 피해 미국으로 떠났습니다. 고양이 사진도 중요했습니다.'},
+      {id:'shostakovich',name:'쇼스타코비치',v:[91,76,86,91,90,100,82],tags:{symphony:4,experiment:2},bio:'젊은 성공 뒤 신문 사설 한 줄로 생존을 걱정하게 됐습니다. 국가가 요구하는 음악과 진짜 하고 싶은 말을 한 악보에 함께 남겼고, 직함을 이용해 동료들을 도왔습니다.'}
+    ];
+    const $=id=>document.getElementById(id);
+    function cap(n){return Math.max(0,Math.min(100,n))}
+    function ageLabel(){const age=10+Math.floor(state.turn/2);return `${age}세 · ${state.turn%2===0?'봄':'가을'}`}
+    function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500)}
+    function addLog(msg){state.log.unshift(msg);state.log=state.log.slice(0,10)}
+    function render(){
+      $('studentName').textContent=state.name;$('ageText').textContent=ageLabel();$('turnText').textContent=`${Math.min(state.turn+1,24)} / 24`;
+      $('worksCount').textContent=state.works+'곡';$('formalCount').textContent=state.tags.formal+'회';$('selfCount').textContent=state.tags.self+'회';$('pianoCount').textContent=state.tags.piano+'회';
+      $('composerCollection').textContent=`${collection.composers.length} / ${profiles.length+2}`;$('endingCount').textContent=`${collection.total}회`;
+      const life=[['건강','health',state.health],['재력','wealth',state.wealth],['명성','fame',state.fame]];
+      $('lifeMeters').innerHTML=life.map(([n,k,v])=>`<div><div class="meter-label"><span>${n}</span><b>${v}</b></div><div class="bar"><div class="fill ${k}" style="width:${cap(v)}%"></div></div></div>`).join('');
+      $('quickLife').innerHTML=life.map(([n,k,v])=>`<div class="quick-meter ${v<=20?'danger':''}"><span>${n}</span><b>${v}</b><div class="bar"><div class="fill ${k}" style="width:${cap(v)}%"></div></div></div>`).join('');
+      $('musicMeters').innerHTML=Object.entries(statNames).map(([k,n])=>`<div class="music-row"><span>${n}</span><div class="bar"><div class="fill" style="width:${state.stats[k]}%"></div></div><b>${state.stats[k]}</b></div>`).join('');
+      const badgeMap=[['문학','literature'],['독주곡','solo'],['실내악','chamber'],['가곡','song'],['협주곡','concerto'],['교향곡','symphony'],['무대','stage'],['관현악','orchestration'],['민요','folk'],['실험','experiment'],['화성실험','expHarmony'],['리듬실험','expRhythm'],['음향실험','expSound']];
+      const activityBadges=badgeMap.map(([n,k])=>`<span class="badge ${state.tags[k]?'':'zero'}">${n} ${state.tags[k]}</span>`).join('');const personalityBadges=Object.entries(state.traits||{}).filter(([,v])=>v>0).map(([k,v])=>`<span class="trait">${traitNames[k]||k}${v>1?' '+v:''}</span>`).join('');$('badges').innerHTML=activityBadges+(personalityBadges?`<div class="trait-list">${personalityBadges}</div>`:'');
+      $('log').innerHTML=state.log.map(x=>`<div>• ${x}</div>`).join('')||'<div>아직 기록이 없습니다.</div>';
+      $('activities').innerHTML=''; actions.forEach(a=>{const b=document.createElement('button');b.className=`activity ${a.css||''}`;const costs=[];const hp=a.displayHp??a.hp,money=a.displayMoney??a.money;if(hp)costs.push(`<span class="${hp>0?'good':'hp'}">체력 ${hp>0?'+':''}${hp}</span>`);if(money)costs.push(`<span class="${money>0?'good':'money'}">재력 ${money>0?'+':''}${money}</span>`);if(a.premiere)costs.push(`<span class="money">초연 성공 ${state.stats.drama}%</span><span>명성·재력 ±10</span>`);b.innerHTML=`<h3>${a.title}</h3><p>${a.desc}</p><div class="cost">${costs.join('')}</div>`;b.onclick=()=>choose(a);$('activities').appendChild(b)});
+      save();
+    }
+    function choose(a){if(ended)return;if(a.special){$('experimentOverlay').classList.add('open');return}if(a.study){$('studyOverlay').classList.add('open');return}applyAction(a)}
+    function applyAction(a,expType){
+      const premiereChance=a.premiere?state.stats.drama:null;
+      state.health=cap(state.health+(a.hp||0));state.wealth=cap(state.wealth+(a.money||0));state.fame=cap(state.fame+(a.fame||0));state.works+=(a.work||0);
+      Object.entries(a.stats||{}).forEach(([k,v])=>state.stats[k]=cap(state.stats[k]+v));if(a.tag)state.tags[a.tag]=(state.tags[a.tag]||0)+1;(a.extraTags||[]).forEach(k=>state.tags[k]=(state.tags[k]||0)+1);
+      let premiereResult='';if(a.premiere){const success=Math.random()*100<premiereChance;const swing=success?10:-10;state.wealth=cap(state.wealth+swing);state.fame=cap(state.fame+swing);premiereResult=success?` · 초연 흥행! (성공률 ${premiereChance}%, 명성·재력 +10)`:` · 초연 참패 (성공률 ${premiereChance}%, 명성·재력 -10)`;toast(success?'초연 흥행! 명성과 재력이 크게 올랐습니다.':'초연 참패… 명성과 재력이 크게 떨어졌습니다.')}
+      if(expType){state.tags.experiment++;state.tags[expType]++;state.works++;state.health=cap(state.health-7);state.wealth=cap(state.wealth-4);state.fame=cap(state.fame+2);state.stats.innovation=cap(state.stats.innovation+10);if(expType==='expHarmony')state.stats.harmony=cap(state.stats.harmony+8);if(expType==='expRhythm')state.stats.rhythm=cap(state.stats.rhythm+8);if(expType==='expSound')state.stats.timbre=cap(state.stats.timbre+8)}
+      addLog(`${ageLabel()} — ${a.title}${expType?' · '+({expHarmony:'화성',expRhythm:'리듬',expSound:'음향'}[expType]):''}${premiereResult}`);state.turn++;
+      if(state.health<=0)return fail('health');if(state.wealth<=0)return fail('wealth');
+      if(state.turn%2===0){const income=Math.min(14,Math.floor(state.fame/10)+Math.floor(state.works/2));state.wealth=cap(state.wealth-3+income);addLog(`연말 결산: 생활비 -3, 악보·의뢰 수입 +${income}`);if(state.wealth<=0)return fail('wealth')}
+      if(state.turn>=24)return finish();
+      $('message').textContent=state.turn%2===0?'새 학년입니다. 이번에는 무엇을 키울까요?':'올해 두 번째 활동을 고르세요.';if([6,12,18].includes(state.turn))return triggerEvent();render();
+    }
+    function effectText(e){const names={health:'건강',wealth:'재력',fame:'명성',structure:'구조',melody:'선율',harmony:'화성',rhythm:'리듬',timbre:'음색',drama:'극성',innovation:'실험'};return Object.entries(e).map(([k,v])=>`${names[k]||k} ${v>0?'+':''}${v}`).join(' · ')}
+    function triggerEvent(){const available=events.filter(e=>!(state.eventsSeen||[]).includes(e.id));const event=available[Math.floor(Math.random()*available.length)];state.pendingEvent=event.id;state.eventsSeen=[...(state.eventsSeen||[]),event.id];render();showEvent(event)}
+    function showEvent(event){$('eventTitle').textContent=event.title;$('eventText').textContent=event.text;$('eventOptions').innerHTML='';event.choices.forEach(choice=>{const b=document.createElement('button');b.className='event-choice';const traits=(choice.traits||[]).map(t=>traitNames[t]||t).join(' · ');b.innerHTML=`<b>${choice.text}</b><span>${effectText(choice.effects)}${traits?' · 성향: '+traits:''}</span>`;b.onclick=()=>applyEventChoice(event,choice);$('eventOptions').appendChild(b)});$('eventOverlay').classList.add('open')}
+    function applyEventChoice(event,choice){Object.entries(choice.effects||{}).forEach(([k,v])=>{if(k==='health'||k==='wealth'||k==='fame')state[k]=cap(state[k]+v);else if(k in state.stats)state.stats[k]=cap(state.stats[k]+v)});(choice.traits||[]).forEach(t=>state.traits[t]=(state.traits[t]||0)+1);state.pendingEvent=null;$('eventOverlay').classList.remove('open');addLog(`돌발사건 — ${event.title}: ${choice.text}`);if(state.health<=0)return fail('health');if(state.wealth<=0)return fail('wealth');$('message').textContent='예상 밖의 일이 지나갔습니다. 다시 육성을 계속합니다.';render()}
+    function hiddenBerlioz(){const t=state.tags,s=state.stats,berliozTraits=['defiant','independent','grandiose','innovative','adventurous'].filter(k=>(state.traits[k]||0)>0).length;return ((state.traits||{}).defiant||0)>=1&&berliozTraits>=2&&t.piano===0&&t.formal<=2&&t.self>=5&&t.symphony>=2&&t.orchestration>=4&&s.timbre>=75&&s.drama>=70}
+    function hiddenMussorgsky(){const t=state.tags,s=state.stats;return t.formal<=1&&t.self>=4&&t.literature>=2&&t.folk>=2&&t.orchestration<=1&&s.drama>=75&&s.innovation>=55}
+    function profileEligible(id){const t=state.tags,s=state.stats,n=k=>t[k]||0,hasTrait=(...xs)=>xs.some(x=>(state.traits[x]||0)>0);const routes={
+      vivaldi:()=>n('concerto')>=4&&n('orchestration')>=1&&s.rhythm>=45&&s.melody>=35,
+      bach:()=>n('counter')>=3&&n('formal')>=2&&s.structure>=70&&s.harmony>=60,
+      haydn:()=>n('chamber')>=3&&n('symphony')>=1&&s.structure>=65&&s.rhythm>=45,
+      mozart:()=>n('piano')>=2&&n('stage')>=1&&['solo','chamber','song','concerto','symphony','stage'].filter(k=>n(k)>0).length>=4&&s.melody>=70,
+      beethoven:()=>n('symphony')>=2&&n('chamber')>=1&&s.structure>=70&&s.drama>=65&&hasTrait('defiant','independent'),
+      rossini:()=>n('stage')>=3&&s.melody>=75&&s.rhythm>=40&&state.wealth>=60&&state.health>=50&&hasTrait('optimistic','pragmatic','opportunist','adaptive'),
+      schubert:()=>n('song')>=4&&n('chamber')>=1&&s.melody>=75&&s.drama>=55,
+      mendelssohn:()=>state.health>=40&&state.wealth>=40&&n('formal')>=2&&n('counter')>=1&&n('piano')>=1&&n('orchestration')>=1,
+      schumann:()=>n('literature')>=2&&n('piano')>=2&&n('solo')>=1&&n('song')>=1,
+      chopin:()=>n('piano')>=3&&n('solo')>=3&&s.melody>=75&&s.harmony>=60,
+      liszt:()=>n('piano')>=3&&n('solo')>=2&&n('symphony')>=1&&state.fame>=50&&s.innovation>=40,
+      wagner:()=>n('stage')>=2&&n('orchestration')>=2&&n('expHarmony')>=1&&s.harmony>=55&&s.innovation>=45,
+      verdi:()=>n('stage')>=4&&n('song')>=1&&s.melody>=75&&s.drama>=75&&state.fame>=45,
+      bruckner:()=>n('symphony')>=3&&n('counter')>=2&&n('orchestration')>=2&&s.structure>=80&&s.harmony>=75,
+      brahms:()=>n('chamber')>=2&&n('symphony')>=1&&n('counter')>=1&&s.structure>=75&&s.harmony>=60,
+      dvorak:()=>n('folk')>=2&&n('symphony')>=1&&n('chamber')>=1&&s.melody>=60&&s.rhythm>=65,
+      rimsky:()=>n('folk')>=1&&n('orchestration')>=3&&s.timbre>=85&&s.harmony>=60,
+      tchaikovsky:()=>n('stage')>=1&&n('symphony')>=2&&n('orchestration')>=2&&s.melody>=75&&s.drama>=70,
+      puccini:()=>n('stage')>=3&&n('orchestration')>=1&&s.melody>=85&&s.drama>=75,
+      mahler:()=>n('symphony')>=3&&n('orchestration')>=2&&n('song')>=1&&s.drama>=75&&s.timbre>=70,
+      strauss:()=>n('orchestration')>=3&&n('stage')>=1&&n('symphony')>=1&&s.harmony>=70&&s.timbre>=80&&s.drama>=80,
+      debussy:()=>n('expHarmony')>=2&&n('orchestration')>=2&&n('literature')>=1&&s.harmony>=70&&s.timbre>=65&&s.innovation>=55,
+      stravinsky:()=>n('expRhythm')>=2&&n('stage')>=1&&n('orchestration')>=1&&s.rhythm>=70&&s.innovation>=55,
+      bartok:()=>n('folk')>=2&&n('expRhythm')>=1&&n('counter')>=1&&s.rhythm>=75&&s.structure>=60&&s.innovation>=55,
+      shostakovich:()=>n('symphony')>=2&&n('experiment')>=1&&s.structure>=65&&s.drama>=70&&hasTrait('cautious','principled','doubleVoice')
+    };return routes[id]?routes[id]():true}
+    function personalityMatches(p){return (personalityMap[p.id]||[]).filter(t=>(state.traits[t]||0)>0)}
+    function musicSimilarity(p){const vals=Object.values(state.stats);const diff=p.v.reduce((sum,target,i)=>sum+Math.abs(target-vals[i]),0)/7;return Math.max(1,Math.min(99,Math.round(100-diff)))}
+    function profileScore(p){const vals=Object.values(state.stats);if(!profileEligible(p.id))return-999;let diff=p.v.reduce((sum,target,i)=>sum+Math.abs(target-vals[i]),0)/7;let score=100-diff;Object.entries(p.tags||{}).forEach(([k,w])=>score+=Math.min(state.tags[k]||0,6)*w);if(p.balance){const max=Math.max(...vals),min=Math.min(...vals);score+=Math.max(0,18-(max-min)*.35)}if(p.varietyWeight){const kinds=['solo','chamber','song','concerto','symphony','stage'].filter(k=>(state.tags[k]||0)>0).length;score+=kinds*p.varietyWeight}if(p.fameWeight)score+=state.fame*p.fameWeight;if(p.wealthWeight)score+=state.wealth*p.wealthWeight;if(p.healthWeight)score+=state.health*p.healthWeight;if(p.worksWeight)score+=Math.min(10,state.works*p.worksWeight);if(p.id==='mendelssohn')score+=Math.min(12,state.health*.06+state.wealth*.06+state.fame*.03);score+=Math.min(6,personalityMatches(p).length*2);return Math.max(1,score)}
+    function finalJong(word){const code=word.charCodeAt(word.length-1)-44032;return code>=0&&code<=11171?code%28:0}
+    function joinKorean(items){if(items.length<=1)return items[0]||'';const head=items.slice(0,-1).join('·'),jong=finalJong(head);return head+(jong?'과 ':'와 ')+items.at(-1)}
+    function roParticle(word){const jong=finalJong(word);return jong&&jong!==8?'으로':'로'}
+    function artisticLegacy(){const qualities={structure:'단단한 구조',melody:'달콤한 선율',harmony:'섬세한 화성',rhythm:'강렬한 리듬',timbre:'오묘한 음색',drama:'드라마틱함',innovation:'혁신과 실험'};const top=Math.max(...Object.values(state.stats));const best=Object.keys(qualities).filter(k=>state.stats[k]===top).map(k=>qualities[k]),qualityText=joinKorean(best);const genres={solo:'독주곡',chamber:'실내악',song:'가곡',concerto:'협주곡',symphony:'교향곡',stage:'무대음악',experiment:'실험음악'};const most=Math.max(...Object.keys(genres).map(k=>state.tags[k]||0));const main=Object.keys(genres).filter(k=>(state.tags[k]||0)===most&&most>0).map(k=>genres[k]);return `${qualityText}${roParticle(qualityText)} 유명했고, ${joinKorean(main)} 분야에서 이름을 남겼습니다.`}
+    function finish(){if(state.works<4||Math.max(...Object.values(state.stats))<55)return fail('ruin');if(hiddenBerlioz())return composerEnding({id:'berlioz',name:'베를리오즈',hiddenType:'피아노 없이 대편성 · 가족에게 반항',bio:'가족은 안정적인 직업을 권했고 음악원에서는 기초가 부족하다고 했으며, 피아노 앞에서는 별일이 일어나지 않았습니다. 하지만 아직 울리지 않은 관현악단의 소리를 머릿속에서 들었습니다. 문학에 과몰입하고 감당할 수 없는 수의 연주자를 요구한 끝에, 어찌저찌 음악가는 됐습니다.'},99,null,true);if(hiddenMussorgsky())return composerEnding({id:'mussorgsky',name:'무소륵스키',hiddenType:'거친 독학 · 민중의 말투 · 미완의 힘',bio:'정규교육과 세련된 마감보다 사람의 실제 말투와 삶을 음악에 그대로 옮기는 편을 택했습니다. 동료들은 악보가 거칠다고 했고 후대의 친구들은 그것을 친절하게 고쳐 출판했습니다. 원래의 거친 힘이 더 좋았다는 사람들도 남았습니다.'},99,null,true);const ranked=profiles.map(p=>({p,score:profileScore(p)})).filter(x=>x.score>-900).sort((a,b)=>b.score-a.score);if(!ranked.length)return genericComposerEnding();composerEnding(ranked[0].p,Math.min(98,Math.round(ranked[0].score)),ranked[1]||null);}
+    function lifeEpilogue(){const bits=[];const h=state.health,w=state.wealth,f=state.fame;bits.push(h>=80?'놀랍게도 건강관리에도 크게 성공했습니다.':h>=55?'대체로 건강하게 활동을 이어갔습니다.':h>=30?'건강 문제로 종종 활동에 지장을 받았습니다.':'말년의 건강은 매우 위태로웠습니다.');bits.push(w>=80?'막대한 재산을 남겼습니다.':w>=60?'경제적으로 성공해 상당한 재산을 남겼습니다.':w>=35?'안정적인 생활을 유지했습니다.':w>=20?'생활비는 어떻게든 해결했습니다.':'재정 상태는 처참했습니다.');bits.push(f>=85?'생전에 이미 시대를 대표하는 대중적 거장이 되었습니다.':f>=60?'생전에 이미 널리 이름을 알린 유명 작곡가가 되었습니다.':f>=35?'음악계에서는 확실히 이름을 알렸습니다.':f>=20?'아는 사람은 아는 작곡가가 되었습니다.':'당대에는 거의 알려지지 않았습니다.');return bits.join(' ')}
+    function composerEnding(p,score,second,hidden=false){ended=true;clearSave();recordEnding(p.id);$('endingModal').className='modal';$('endKicker').textContent=hidden?'HIDDEN ENDING':'COMPOSER ENDING';$('endTitle').textContent=p.name+'형 작곡가';const matches=personalityMatches(p).map(t=>traitNames[t]||t);$('endType').textContent=hidden?(p.hiddenType||'숨겨진 작곡가 유형'):`음악 유사도 ${musicSimilarity(p)}% · 성격 일치 ${matches.length}개`;$('endText').textContent=p.bio+' '+artisticLegacy()+' '+lifeEpilogue();const stats=Object.entries(statNames).map(([k,n])=>`<div class="scoreline"><span>${n}</span><b>${state.stats[k]}</b></div>`).join('');const runnerUp=second?`<p class="fineprint">다음 후보: <b>${second.p.name}형</b> · 음악 유사도 ${musicSimilarity(second.p)}% · 성격 일치 ${personalityMatches(second.p).length}개</p>`:`<p class="fineprint">필수 활동을 충족한 다른 작곡가 유형이 없습니다.</p>`;const personality=matches.length?`<p class="fineprint">일치 성향: ${matches.join(' · ')}</p>`:'';const hiddenRows=p.id==='berlioz'?`<div class="scoreline"><span>피아노 수업</span><b>0회</b></div><div class="scoreline"><span>정규교육</span><b>${state.tags.formal}회</b></div><div class="scoreline"><span>독학</span><b>${state.tags.self}회</b></div>`:`<div class="scoreline"><span>정규교육</span><b>${state.tags.formal}회</b></div><div class="scoreline"><span>독학</span><b>${state.tags.self}회</b></div><div class="scoreline"><span>문학</span><b>${state.tags.literature}회</b></div><div class="scoreline"><span>민요</span><b>${state.tags.folk}회</b></div>`;const extra=hidden?`${hiddenRows}${personality}`:`${runnerUp}${personality}`;$('endDetails').innerHTML=`<div class="end-grid"><div class="end-box"><h3>최종 음악 수치</h3>${stats}</div><div class="end-box"><h3>육성 결과</h3><div class="scoreline"><span>완성작</span><b>${state.works}곡</b></div><div class="scoreline"><span>건강</span><b>${state.health}</b></div><div class="scoreline"><span>재력</span><b>${state.wealth}</b></div><div class="scoreline"><span>명성</span><b>${state.fame}</b></div>${extra}</div></div>`;$('endingOverlay').classList.add('open')}
+    function genericComposerEnding(){ended=true;clearSave();recordEnding();$('endingModal').className='modal';$('endKicker').textContent='COMPOSER ENDING';$('endTitle').textContent='그냥 작곡가…';$('endType').textContent='어찌저찌 음악가는 되었습니다.';$('endText').textContent='어느 거장의 길도 정확히 따라가지는 않았지만, 완성한 악보들은 분명히 남았습니다. '+artisticLegacy()+' '+lifeEpilogue();const stats=Object.entries(statNames).map(([k,n])=>`<div class="scoreline"><span>${n}</span><b>${state.stats[k]}</b></div>`).join('');$('endDetails').innerHTML=`<div class="end-grid"><div class="end-box"><h3>최종 음악 수치</h3>${stats}</div><div class="end-box"><h3>육성 결과</h3><div class="scoreline"><span>완성작</span><b>${state.works}곡</b></div><div class="scoreline"><span>건강</span><b>${state.health}</b></div><div class="scoreline"><span>재력</span><b>${state.wealth}</b></div><div class="scoreline"><span>명성</span><b>${state.fame}</b></div><p class="fineprint">특정 작곡가 유형의 필수조건은 충족하지 못했습니다.</p></div></div>`;$('endingOverlay').classList.add('open')}
+    function fail(type){ended=true;clearSave();recordEnding();$('endingModal').className='modal fail';const data={health:['육성 중단','아파서 더 이상 공부를 못하겠습니다.','건강이 0이 되었습니다. 악보는 책상 위에 남았지만, 지금은 작곡보다 치료와 휴식이 먼저입니다.'],wealth:['육성 중단','거지가 되어서 더 이상 공부를 못합니다.','재력이 0이 되었습니다. 수업료도 악보값도 연주자 비용도 낼 수 없습니다. 예술은 길고 생활비는 매달 찾아옵니다.'],ruin:['BAD ENDING','개처망함.','수업도 조금 듣고 악보도 조금 썼지만, 끝내 작곡가라고 부를 만한 결과를 만들지 못했습니다. 무엇이 되고 싶었는지도 잘 모르겠습니다. 그래도 다시 키우면 됩니다. 값싼 도파민 게임이니까.']};const d=data[type];$('endKicker').textContent=d[0];$('endTitle').textContent=d[1];$('endType').textContent='작곡가 유형 판정 실패';$('endText').textContent=d[2];$('endDetails').innerHTML=`<div class="end-box"><div class="scoreline"><span>완성작</span><b>${state.works}곡</b></div><div class="scoreline"><span>건강</span><b>${state.health}</b></div><div class="scoreline"><span>재력</span><b>${state.wealth}</b></div><div class="scoreline"><span>명성</span><b>${state.fame}</b></div></div>`;$('endingOverlay').classList.add('open')}
+    function showCollection(){const all=[...profiles.map(p=>({id:p.id,name:p.name})),{id:'berlioz',name:'베를리오즈',hidden:true},{id:'mussorgsky',name:'무소륵스키',hidden:true}];$('collectionGrid').innerHTML=all.map((p,i)=>{const found=collection.composers.includes(p.id);return `<div class="collection-card ${found?'found':''} ${p.hidden?'hidden':''}">${found?`${p.name}<small>${p.hidden?'HIDDEN ENDING':'COMPOSER '+String(i+1).padStart(2,'0')}</small>`:'???'}</div>`}).join('');$('collectionOverlay').classList.add('open')}
+    function save(){if(!ended)localStorage.setItem('composer-maker-save',JSON.stringify(state))}function clearSave(){localStorage.removeItem('composer-maker-save')}
+    function restart(){clearSave();state=initial();ended=false;$('endingOverlay').classList.remove('open');$('nameOverlay').classList.add('open');render()}
+    $('startBtn').onclick=()=>{state.name=$('nameInput').value.trim()||'이름 없는 영재';$('nameOverlay').classList.remove('open');render()};
+    document.querySelectorAll('[data-exp]').forEach(b=>b.onclick=()=>{const type=b.dataset.exp;$('experimentOverlay').classList.remove('open');applyAction(actions.find(x=>x.id==='experiment'),type)});
+    document.querySelectorAll('[data-study]').forEach(b=>b.onclick=()=>{const type=b.dataset.study;$('studyOverlay').classList.remove('open');applyAction(studyActions[type])});
+    $('collectionBtn').onclick=showCollection;$('collectionClose').onclick=()=>$('collectionOverlay').classList.remove('open');
+    $('quitBtn').onclick=()=>{if(confirm('정말 육성을 포기할까요?'))fail('ruin')};$('retryBtn').onclick=restart;
+    const saved=localStorage.getItem('composer-maker-save');if(saved){try{const old=JSON.parse(saved),fresh=initial();state={...fresh,...old,stats:{...fresh.stats,...(old.stats||{})},tags:{...fresh.tags,...(old.tags||{})},traits:{...(old.traits||{})},eventsSeen:[...(old.eventsSeen||[])]};$('nameOverlay').classList.remove('open')}catch{$('nameOverlay').classList.add('open')}}else $('nameOverlay').classList.add('open');render();if(state.pendingEvent){const event=events.find(e=>e.id===state.pendingEvent);if(event)showEvent(event)}
+  </script>
+</body>
+</html>
